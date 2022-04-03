@@ -1,0 +1,12 @@
+[Unit]
+Description="Frontend sidecar proxy service"
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/consul connect envoy -sidecar-for frontend \
+  -admin-bind 127.0.0.1:19000
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
