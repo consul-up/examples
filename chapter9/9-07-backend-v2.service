@@ -1,0 +1,15 @@
+[Unit]
+Description="Backend service v2"
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/backend
+Restart=on-failure
+
+Environment=BIND_ADDR=0.0.0.0:7001
+Environment=TRACING_URL="http://localhost:9411"
+Environment=VERSION=v2
+
+[Install]
+WantedBy=multi-user.target

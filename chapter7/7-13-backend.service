@@ -1,0 +1,17 @@
+[Unit]
+Description="Backend service"
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/backend
+Restart=on-failure
+
+# We will set the backend service to listen
+# on port 7000.
+Environment=BIND_ADDR=0.0.0.0:7000
+
+Environment=TRACING_URL="http://localhost:9411"
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceResolver
+metadata:
+  name: backend
+spec:
+  subsets:
+    v1:
+      filter: 'Service.Meta.version == v1'
+    v2:
+      filter: 'Service.Meta.version == v2'

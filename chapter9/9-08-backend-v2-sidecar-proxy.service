@@ -1,0 +1,12 @@
+[Unit]
+Description="Backend v2 sidecar proxy service"
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/consul connect envoy -sidecar-for backend-v2 \
+  -admin-bind 127.0.0.1:19003
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,15 @@
+[Unit]
+Description="Consul ingress gateway"
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/consul connect envoy \
+    -gateway=ingress \
+    -service ingress-gateway \
+    -admin-bind 127.0.0.1:19002 \
+    -address 127.0.0.1:20000
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
