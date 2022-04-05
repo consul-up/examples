@@ -2,7 +2,6 @@ global:
   name: consul
   metrics:
     enabled: true
-  image: hashicorp/consul:1.11.4
   imageK8S: ghcr.io/consul-up/k8s-cp:0.41.1-1
 
 server:
