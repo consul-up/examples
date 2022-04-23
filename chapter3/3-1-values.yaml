@@ -8,7 +8,6 @@ global:
   # in your installation.
   metrics:
     enabled: true
-  imageK8S: ghcr.io/consul-up/k8s-cp:0.41.1-1
 
 # Settings under "server" configure Consul servers.
 server:
