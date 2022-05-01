@@ -8,6 +8,8 @@ global:
   # in your installation.
   metrics:
     enabled: true
+  # Consul image.
+  image: hashicorp/consul:1.11.5
 
 # Settings under "server" configure Consul servers.
 server:

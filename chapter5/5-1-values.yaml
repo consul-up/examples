@@ -2,6 +2,7 @@ global:
   name: consul
   metrics:
     enabled: true
+  image: hashicorp/consul:1.11.5
 
 server:
   replicas: 1
