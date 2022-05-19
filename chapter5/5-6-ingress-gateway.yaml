@@ -9,4 +9,4 @@ spec:
       protocol: http
       services:
         - name: frontend
-          hosts: [ "localhost" ]
+          hosts: ["localhost"]
