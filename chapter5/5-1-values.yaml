@@ -3,6 +3,7 @@ global:
   metrics:
     enabled: true
   image: hashicorp/consul:1.11.5
+  imageEnvoy: envoyproxy/envoy:v1.20.2
 
 server:
   replicas: 1
