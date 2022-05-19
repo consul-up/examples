@@ -25,8 +25,8 @@ connectInject:
   enabled: true
 
 # Settings under "controller" configure Consul's controller
-# that manages CRDs (Custom Resource Definitions).
-# CRDs are covered in later chapters.
+# that manages custom resources.
+# Custom resources are covered in later chapters.
 controller:
   enabled: true
 
