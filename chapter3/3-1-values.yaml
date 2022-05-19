@@ -10,6 +10,8 @@ global:
     enabled: true
   # Consul image.
   image: hashicorp/consul:1.11.5
+  # Envoy image.
+  imageEnvoy: envoyproxy/envoy:v1.20.2
 
 # Settings under "server" configure Consul servers.
 server:
