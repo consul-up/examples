@@ -6,7 +6,7 @@ service {
     {
       name     = "ingress-gateway listening"
       tcp      = "localhost:20000"
-      interval = "30s"
+      interval = "10s"
     }
   ]
 }
