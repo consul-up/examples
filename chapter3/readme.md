@@ -1,6 +1,4 @@
-# Chapter 3
-
-## Figures
+## Chapter 3
 
 ### Figure 3-1: _values.yaml_
 
@@ -118,26 +116,4 @@ client_addr = "0.0.0.0"
 # 0.0.0.0 but in Vagrant, setting this to 127.0.0.1
 # prevents issues if the IP changes.
 bind_addr = "127.0.0.1"
-```
-
-## Commands
-
-```bash
-kubectl version --client
-```
-
-```bash
-export DOMAIN="https://storage.googleapis.com"
-curl -LO \
-  "$DOMAIN/minikube/releases/v1.25.2/minikube-darwin-amd64"
-sudo install minikube-darwin-amd64 /usr/local/bin/minikube
-rm minikube-darwin-amd64
-```
-
-```bash
-export DOMAIN="https://storage.googleapis.com"
-curl -LO \
-  "$DOMAIN/minikube/releases/v1.25.2/minikube-darwin-arm64"
-sudo install minikube-darwin-arm64 /usr/local/bin/minikube
-rm minikube-darwin-arm64
 ```
