@@ -1,0 +1,8 @@
+== Chapter 3
+
+[subs="+quotes"]
+----
+$ *kubectl version --client*
+
+Client Version: version.Info{Major:"1", Minor:"23", ...
+----
