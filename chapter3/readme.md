@@ -1,5 +1,6 @@
-## Chapter 3
+# Chapter 3
 
+## Figures
 
 ### Figure 3-1: _values.yaml_
 
@@ -53,7 +54,7 @@ ui:
 
 ```
 
-## Figure 3-2: _Vagrantfile_
+### Figure 3-2: _Vagrantfile_
 
 ```ruby
 Vagrant.configure("2") do |config|
@@ -68,7 +69,7 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-## Figure 3-3: _server.hcl_
+### Figure 3-3: _server.hcl_
 
 ```hcl
 # connect
@@ -117,4 +118,26 @@ client_addr = "0.0.0.0"
 # 0.0.0.0 but in Vagrant, setting this to 127.0.0.1
 # prevents issues if the IP changes.
 bind_addr = "127.0.0.1"
+```
+
+## Commands
+
+```console
+kubectl version --client
+```
+
+```console
+export DOMAIN="https://storage.googleapis.com"
+curl -LO \
+  "$DOMAIN/minikube/releases/v1.25.2/minikube-darwin-amd64"
+sudo install minikube-darwin-amd64 /usr/local/bin/minikube
+rm minikube-darwin-amd64
+```
+
+```console
+export DOMAIN="https://storage.googleapis.com"
+curl -LO \
+  "$DOMAIN/minikube/releases/v1.25.2/minikube-darwin-arm64"
+sudo install minikube-darwin-arm64 /usr/local/bin/minikube
+rm minikube-darwin-arm64
 ```
