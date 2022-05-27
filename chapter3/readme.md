@@ -122,11 +122,11 @@ bind_addr = "127.0.0.1"
 
 ## Commands
 
-```console
+```bash
 kubectl version --client
 ```
 
-```console
+```bash
 export DOMAIN="https://storage.googleapis.com"
 curl -LO \
   "$DOMAIN/minikube/releases/v1.25.2/minikube-darwin-amd64"
@@ -134,7 +134,7 @@ sudo install minikube-darwin-amd64 /usr/local/bin/minikube
 rm minikube-darwin-amd64
 ```
 
-```console
+```bash
 export DOMAIN="https://storage.googleapis.com"
 curl -LO \
   "$DOMAIN/minikube/releases/v1.25.2/minikube-darwin-arm64"
