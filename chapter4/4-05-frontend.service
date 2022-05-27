@@ -2,7 +2,7 @@
 Description="Frontend service"
 
 # The service requires the VM's network
-# to be configured, e.g. an IP address has been assigned.
+# to be configured, e.g., an IP address has been assigned.
 Requires=network-online.target
 After=network-online.target
 

@@ -1,3 +1,4 @@
+# deny-all-service-intentions.yaml
 apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceIntentions
 metadata:

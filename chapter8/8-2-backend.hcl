@@ -3,7 +3,7 @@ service {
   port = 7000
 
   meta {
-    version = "v1"
+    version         = "v1"
     prometheus_port = "20201"
   }
 
@@ -20,9 +20,10 @@ service {
 
   checks = [
     {
-      name = "Health endpoint"
-      http = "http://localhost:9999/healthz"
+      name     = "Health endpoint"
+      http     = "http://localhost:9999/healthz"
       interval = "10s"
-      timeout = "1s"
+      timeout  = "1s"
     }
   ]
+}
