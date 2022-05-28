@@ -9,11 +9,11 @@ another file with all the commands.
 
 Use the table of contents dropdown (top left of each file) to quickly navigate to the relevant figure:
 
-![table of contents](./.images/outline.png | width=400)
+<img src="https://github.com/consul-up/examples/blob/lkysow/test/.images/outline.png" alt="Table of contents" width="400"/>
 
 And hover over the top right of each snippet to quickly copy:
 
-![copy](./.images/copy.png | width=400)
+<img src="https://github.com/consul-up/examples/blob/lkysow/test/.images/copy.png" alt="copy" width="400"/>
 
 * Chapter 3
   * [Figures](chapter3/readme.md)
