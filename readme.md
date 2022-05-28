@@ -1,6 +1,6 @@
 # Consul: Up & Running Code Snippets
 
-Code snippets for [Consul: Up & Running](https://www.oreilly.com/library/view/consul-up-and/9781098106133/) by Luke Kysow.
+Code snippets for [Consul: Up & Running](https://www.oreilly.com/library/view/consul-up-and/9781098106133/) by Luke Kysow
 
 ## How to use this repository
 
@@ -9,11 +9,11 @@ another file with all the commands.
 
 Use the table of contents dropdown (top left of each file) to quickly navigate to the relevant figure:
 
-![table of contents](./.images/outline.png)
+![table of contents](./.images/outline.png | width=400)
 
 And hover over the top right of each snippet to quickly copy:
 
-![copy](./.images/copy.png)
+![copy](./.images/copy.png | width=400)
 
 * Chapter 3
   * [Figures](chapter3/readme.md)
