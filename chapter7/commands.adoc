@@ -1,0 +1,195 @@
+[subs="+quotes"]
+----
+$ *vagrant ssh*
+----
+
+[subs="+quotes"]
+----
+$ *sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl start prometheus*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl status prometheus*
+
+  prometheus.service - Monitoring system and time series database
+   Active: active (running) since ...; 3s ago
+----
+
+[subs="+quotes"]
+----
+$ *consul reload*
+
+Configuration reload triggered
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl restart frontend-sidecar-proxy*
+$ *sudo systemctl restart backend-sidecar-proxy*
+$ *sudo systemctl restart ingress-gateway*
+----
+
+[subs="+quotes"]
+----
+$ *kubectl create secret generic grafana-admin \
+      --from-literal=admin-user=admin \
+      --from-literal=admin-password=admin*
+----
+
+[subs="+quotes"]
+----
+$ *helm install grafana grafana \
+      --version 6.17.1 \
+      --repo https://grafana.github.io/helm-charts \
+      --set 'service.type=LoadBalancer' \
+      --set 'service.port=3000' \
+      --set 'persistence.enabled=true' \
+      --set 'rbac.pspEnabled=false' \
+      --set 'admin.existingSecret=grafana-admin' \
+      --wait*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl start grafana-server*
+----
+
+[subs="+quotes"]
+----
+$ *consul-k8s upgrade -config-file values.yaml*
+----
+
+[subs="+quotes"]
+----
+$ *consul reload*
+----
+
+[subs="+quotes"]
+----
+$ *helm install jaeger jaeger-operator \
+      --version 2.26.0 \
+      --repo https://jaegertracing.github.io/helm-charts \
+      --wait*
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f jaeger.yaml*
+
+jaeger.jaegertracing.io/jaeger created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl rollout status --watch deploy/jaeger*
+
+deployment "jaeger" successfully rolled out
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f frontend-deployment.yaml -f backend-deployment.yaml*
+
+deployment.apps/frontend configured
+deployment.apps/backend configured
+----
+
+[subs="+quotes"]
+----
+$ *kubectl rollout status --watch deploy/frontend*
+
+deployment "frontend" successfully rolled out
+
+$ *kubectl rollout status --watch deploy/backend*
+
+deployment "backend" successfully rolled out
+----
+
+[subs="+quotes"]
+----
+$ *vagrant ssh*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl start jaeger*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl status jaeger*
+...
+   Active: active (running) since ...; 3s ago
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl daemon-reload*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl restart frontend backend*
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f proxy-defaults.yaml*
+
+proxydefaults.consul.hashicorp.com/global configured
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get proxydefaults global -n consul*
+
+NAME     SYNCED   LAST SYNCED   AGE
+global   True     1s            1d
+----
+
+[subs="+quotes"]
+----
+$ *kubectl rollout restart deploy/consul-ingress-gateway -n consul*
+$ *kubectl rollout restart deploy/frontend*
+$ *kubectl rollout restart deploy/backend*
+
+deployment.apps/consul-ingress-gateway restarted
+deployment.apps/frontend restarted
+deployment.apps/backend restarted
+----
+
+[subs="+quotes"]
+----
+$ *kubectl rollout status deploy/consul-ingress-gateway --watch -n consul*
+
+deployment "consul-ingress-gateway" successfully rolled out
+
+$ *kubectl rollout status deploy/frontend --watch*
+
+deployment "frontend" successfully rolled out
+
+$ *kubectl rollout status deploy/backend --watch*
+
+deployment "backend" successfully rolled out
+----
+
+[subs="+quotes"]
+----
+$ *consul config write ~/proxy-defaults.hcl*
+
+Config entry written: proxy-defaults/global
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl restart ingress-gateway*
+$ *sudo systemctl restart frontend-sidecar-proxy*
+$ *sudo systemctl restart backend-sidecar-proxy*
+----
+

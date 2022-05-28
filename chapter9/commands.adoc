@@ -1,0 +1,137 @@
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-service-resolver.yaml*
+
+serviceresolver.consul.hashicorp.com/backend created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get serviceresolver backend*
+
+NAME      SYNCED   LAST SYNCED   AGE
+backend   True     1s            1s
+----
+
+[subs="+quotes"]
+----
+$ *consul config write backend-service-resolver.hcl*
+
+Config entry written: service-resolver/backend
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-service-splitter.yaml*
+
+servicesplitter.consul.hashicorp.com/backend created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get servicesplitter backend*
+
+NAME      SYNCED   LAST SYNCED   AGE
+backend   True     1s            1s
+----
+
+[subs="+quotes"]
+----
+$ *consul config write backend-service-splitter.hcl*
+
+Config entry written: service-splitter/backend
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-v2-deployment.yaml*
+----
+
+[subs="+quotes"]
+----
+$ *kubectl rollout status --watch deploy/backend-v2*
+
+deployment "backend-v2" successfully rolled out
+----
+
+[subs="+quotes"]
+----
+$ *consul reload*
+
+Configuration reload triggered
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl enable backend-v2*
+
+Created symlink /etc/sys...
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl start backend-v2*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl enable backend-v2-sidecar-proxy*
+
+Created symlink /etc/sys...
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl start backend-v2-sidecar-proxy*
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-service-router.yaml*
+
+servicerouter.consul.hashicorp.com/backend configured
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get servicerouter backend*
+
+NAME      SYNCED   LAST SYNCED   AGE
+backend   True     1s            1h
+----
+
+[subs="+quotes"]
+----
+$ *consul config write backend-service-router.hcl*
+
+Config entry written: service-router/backend
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-service-splitter.yaml*
+
+servicesplitter.consul.hashicorp.com/backend configured
+----
+
+[subs="+quotes"]
+----
+$ *consul config write backend-service-splitter.hcl*
+
+Config entry written: service-splitter/backend
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-service-splitter.yaml*
+
+servicesplitter.consul.hashicorp.com/backend configured
+----
+
+[subs="+quotes"]
+----
+$ *consul config write backend-service-splitter.hcl*
+
+Config entry written: service-splitter/backend
+----
+
