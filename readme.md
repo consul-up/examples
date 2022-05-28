@@ -19,6 +19,26 @@ And hover over the top right of each snippet to quickly copy:
 <img src="https://github.com/consul-up/examples/blob/lkysow/test/.images/copy.png" alt="copy" width="400"/>
 </p>
 
+## Quick Links
+
 * Chapter 3
   * [Figures](chapter3/readme.md)
   * [Commands](chapter3/commands.adoc)
+* Chapter 4
+  * [Figures](chapter4/readme.md)
+  * [Commands](chapter4/commands.adoc)
+* Chapter 5
+  * [Figures](chapter5/readme.md)
+  * [Commands](chapter5/commands.adoc)
+* Chapter 6
+  * [Figures](chapter6/readme.md)
+  * [Commands](chapter6/commands.adoc)
+* Chapter 7
+  * [Figures](chapter7/readme.md)
+  * [Commands](chapter7/commands.adoc)
+* Chapter 8
+  * [Figures](chapter8/readme.md)
+  * [Commands](chapter8/commands.adoc)
+* Chapter 9
+  * [Figures](chapter9/readme.md)
+  * [Commands](chapter9/commands.adoc)
