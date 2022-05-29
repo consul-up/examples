@@ -1,0 +1,29 @@
+[Unit]
+Description="Frontend service"
+
+# The service requires the VM's network
+# to be configured, e.g., an IP address has been assigned.
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+# ExecStart is the command to run.
+ExecStart=/usr/local/bin/frontend
+
+# Restart configures the restart policy. In this case, we
+# want to restart the service if it fails.
+Restart=on-failure
+
+# Environment sets environment variables.
+# We will set the frontend service to listen
+# on port 6060.
+Environment=BIND_ADDR=0.0.0.0:6060
+
+# We set BACKEND_URL to http://localhost:7000 because
+# that's the port we'll run our backend service on.
+Environment=BACKEND_URL=http://localhost:7000
+
+# The Install section configures this service to start
+# automatically if the VM reboots.
+[Install]
+WantedBy=multi-user.target

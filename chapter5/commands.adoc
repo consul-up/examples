@@ -1,0 +1,208 @@
+[subs="+quotes"]
+----
+$ *minikube tunnel*
+----
+
+[subs="+quotes"]
+----
+$ *consul-k8s upgrade -config-file values.yaml*
+----
+
+[subs="+quotes"]
+----
+$ *sudo touch /etc/consul.d/ingress-gateway.hcl*
+----
+
+[subs="+quotes"]
+----
+$ *consul reload*
+
+Configuration reload triggered
+----
+
+[subs="+quotes"]
+----
+$ *sudo touch /etc/systemd/system/ingress-gateway.service*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl enable ingress-gateway*
+
+Created symlink ...
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl start ingress-gateway*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl status ingress-gateway*
+
+ingress-gateway.service - "Consul ingress gateway"
+   Loaded: loaded (...)
+   Active: active (running)...
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f ingress-gateway.yaml*
+
+ingressgateway.consul.hashicorp.com/my-gateway created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get ingressgateway*
+
+NAME         SYNCED   LAST SYNCED   AGE
+my-gateway   True     17s           17s
+----
+
+[subs="+quotes"]
+----
+$ *kubectl edit ingressgateway my-gateway*
+
+ingressgateway.consul.hashicorp.com/my-gateway edited
+----
+
+[subs="+quotes"]
+----
+$ *kubectl delete ingressgateway my-gateway*
+
+ingressgateway.consul.hashicorp.com/my-gateway deleted
+----
+
+[subs="+quotes"]
+----
+$ *consul config write ingress-gateway.hcl*
+
+Config entry written: ingress-gateway/my-gateway
+----
+
+[subs="+quotes"]
+----
+$ *consul config list -kind ingress-gateway*
+
+my-gateway
+----
+
+[subs="+quotes"]
+----
+$ *consul config write ingress-gateway.hcl*
+
+Config entry written: ingress-gateway/my-gateway
+----
+
+[subs="+quotes"]
+----
+$ *consul config delete -kind ingress-gateway -name my-gateway*
+
+Config entry deleted: ingress-gateway/my-gateway
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f ingress-gateway.yaml*
+
+ingressgateway.consul.hashicorp.com/ingress-gateway created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get ingressgateway ingress-gateway -n consul*
+
+NAME              SYNCED   LAST SYNCED   AGE
+ingress-gateway   False                  1s
+----
+
+[subs="+quotes"]
+----
+$ *kubectl describe ingressgateway ingress-gateway -n consul*
+...
+Status:
+  Conditions:
+    Last Transition Time:  ...
+    Message: writing config entry to consul:
+      Unexpected response code: 500 (rpc error making call:
+      service "frontend" has protocol "tcp", which does not match
+      defined listener protocol "http")
+    Reason:                ConsulAgentError
+    Status:                False
+    Type:                  Synced
+Events:                    <none>
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f proxy-defaults.yaml*
+
+proxydefaults.consul.hashicorp.com/global created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get proxydefaults global -n consul*
+
+NAME     SYNCED   LAST SYNCED   AGE
+global   True     9s            9s
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get ingressgateway ingress-gateway -n consul*
+
+NAME              SYNCED   LAST SYNCED   AGE
+ingress-gateway   True     9s            1m
+----
+
+[subs="+quotes"]
+----
+$ *vagrant ssh*
+----
+
+[subs="+quotes"]
+----
+$ *cd ~*
+----
+
+[subs="+quotes"]
+----
+$ *touch ingress-gateway.hcl*
+----
+
+[subs="+quotes"]
+----
+$ *consul config write ingress-gateway.hcl*
+
+Error writing config entry ingress-gateway/ingress-gateway:
+  Unexpected response code: 500 (service "frontend" has protocol
+  "tcp", which does not match defined listener protocol "http")
+----
+
+[subs="+quotes"]
+----
+$ *consul config write proxy-defaults.hcl*
+
+Config entry written: proxy-defaults/global
+----
+
+[subs="+quotes"]
+----
+$ *consul config write ingress-gateway.hcl*
+
+Config entry written: ingress-gateway/ingress-gateway
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl daemon-reload*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl restart frontend*
+----
+

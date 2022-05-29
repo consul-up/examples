@@ -1,0 +1,248 @@
+[subs="+quotes"]
+----
+$ *kubectl version --client*
+
+Client Version: version.Info{Major:"1", Minor:"23", ...
+----
+
+[subs="+quotes"]
+----
+$ *export DOMAIN="https://storage.googleapis.com"*
+$ *curl -LO \
+    "$DOMAIN/minikube/releases/v1.25.2/minikube-darwin-amd64"*
+$ *sudo install minikube-darwin-amd64 /usr/local/bin/minikube*
+$ *rm minikube-darwin-amd64*
+----
+
+[subs="+quotes"]
+----
+$ *export DOMAIN="https://storage.googleapis.com"*
+$ *curl -LO \
+    "$DOMAIN/minikube/releases/v1.25.2/minikube-darwin-arm64"*
+$ *sudo install minikube-darwin-arm64 /usr/local/bin/minikube*
+$ *rm minikube-darwin-arm64*
+----
+
+[subs="+quotes"]
+----
+$ *minikube start --driver=docker --kubernetes-version=v1.23.3*
+----
+
+[subs="+quotes"]
+----
+$ *minikube status*
+
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get nodes*
+
+NAME       STATUS   ROLES                  AGE   VERSION
+minikube   Ready    control-plane,master   1m    v1.23.3
+----
+
+[subs="+quotes"]
+----
+$ *sudo mv <path-to-downloads>/consul-k8s /usr/local/bin*
+----
+
+[subs="+quotes"]
+----
+$ *consul-k8s version*
+
+consul-k8s v0.44.0
+----
+
+[subs="+quotes"]
+----
+$ *mkdir -p \~/code/consul*
+$ *cd ~/code/consul*
+----
+
+[subs="+quotes"]
+----
+$ *minikube tunnel*
+
+Tunnel successfully started
+----
+
+[subs="+quotes"]
+----
+$ *consul-k8s install -config-file values.yaml*
+
+...
+Consul installed in namespace "consul".
+----
+
+[subs="+quotes"]
+----
+$ *consul-k8s status*
+
+...
+Consul servers healthy (1/1)
+Consul clients healthy (1/1)
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get daemonset,statefulset,deployment -n consul*
+
+NAME
+daemonset.apps/consul-client
+
+NAME
+statefulset.apps/consul-server
+
+NAME
+deployment.apps/consul-connect-injector
+deployment.apps/consul-controller
+deployment.apps/consul-webhook-cert-manager
+deployment.apps/prometheus-server
+----
+
+[subs="+quotes"]
+----
+$ *mkdir -p \~/code/consul*
+$ *cd ~/code/consul*
+----
+
+[subs="+quotes"]
+----
+$ *vagrant status*
+
+Current machine states:
+default                   not created (virtualbox)
+----
+
+[subs="+quotes"]
+----
+$ *vagrant up*
+----
+
+[subs="+quotes"]
+----
+$ *vagrant status*
+
+Current machine states:
+default                   running (virtualbox)
+...
+----
+
+[subs="+quotes"]
+----
+$ *vagrant ssh*
+----
+
+[subs="+quotes"]
+----
+$ *consul version*
+
+Consul v1.11.5
+Revision d8983fc9
+Protocol 2 spoken by default...
+----
+
+[subs="+quotes"]
+----
+$ *sudo vim /etc/consul.d/server.hcl*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl enable consul*
+
+Created symlink /etc/systemd/system/...
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl start consul*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl status consul*
+
+  consul.service - "HashiCorp Consul - A service mesh solution"
+     Loaded: loaded (/lib/systemd/...
+     Active: active (running) since ...
+     ...
+----
+
+[subs="+quotes"]
+----
+$ *journalctl -u consul*
+
+systemd[1]: Started "HashiCorp Consul - A service mesh solution".
+consul[31615]: ==> Starting Consul agent...
+consul[31615]:            Version: \'1.11.5'
+consul[31615]:            Node ID: \'01ec3a1e-11c5-9a04-0a62-65afaf4447b2'
+consul[31615]:          Node name: \'vagrant'
+consul[31615]:         Datacenter: \'dc1' (Segment: \'<all>')
+consul[31615]:             Server: true (Bootstrap: true)
+consul[31615]:        Client Addr: [0.0.0.0] (HTTP: 8500, HTTPS: -1, ...
+...
+----
+
+[subs="+quotes"]
+----
+$ *kubectl port-forward service/consul-ui -n consul 8500*
+----
+
+[subs="+quotes"]
+----
+$ *kubectl exec -it consul-server-0 -n consul -- sh*
+----
+
+[subs="+quotes"]
+----
+$ *consul --help*
+
+Usage: consul [--version] [--help] <command> [<args>]
+Available commands are:
+    acl            Interact with Consul's ACLs
+    agent          Runs a Consul agent
+    catalog        Interact with the catalog
+    config         Interact with Consul's Centralized Configurations
+    connect        Interact with Consul Connect
+    debug          Records a debugging archive for operators
+    event          Fire a new event
+...
+----
+
+[subs="+quotes"]
+----
+$ *consul catalog services*
+
+consul
+----
+
+[subs="+quotes"]
+----
+$ *consul catalog nodes*
+
+Node             ID        Address      DC
+consul-server-0  4fd4d9c3  172.17.0.9   dc1
+minikube         5490f3d5  172.17.0.10  dc1
+----
+
+[subs="+quotes"]
+----
+$ *curl http://localhost:8500/v1/catalog/services?pretty*
+
+{
+    "consul": []
+}
+----
+
+[subs="+quotes"]
+----
+$ *exit*
+----

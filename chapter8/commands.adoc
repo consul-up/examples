@@ -1,0 +1,82 @@
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-deployment.yaml*
+
+deployment.apps/backend configured
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-deployment.yaml*
+
+deployment.apps/backend configured
+----
+
+[subs="+quotes"]
+----
+$ *kubectl rollout status --watch deploy/backend*
+
+Waiting for deployment "backend" rollout to finish:
+  1 old replicas are pending termination...
+deployment "backend" successfully rolled out
+----
+
+[subs="+quotes"]
+----
+$ *vagrant ssh*
+----
+
+[subs="+quotes"]
+----
+$ *consul reload*
+----
+
+[subs="+quotes"]
+----
+$ *consul reload*
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-service-router.yaml*
+
+servicerouter.consul.hashicorp.com/backend created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get servicerouter backend*
+
+NAME      SYNCED   LAST SYNCED   AGE
+backend   True     1s            1s
+----
+
+[subs="+quotes"]
+----
+$ *consul config write backend-service-router.hcl*
+
+Config entry written: service-router/backend
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-service-router.yaml*
+
+servicerouter.consul.hashicorp.com/backend configured
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get servicerouter backend*
+
+NAME      SYNCED   LAST SYNCED   AGE
+backend   True     1s            15m
+----
+
+[subs="+quotes"]
+----
+$ *consul config write backend-service-router.hcl*
+
+Config entry written: service-router/backend
+----
+

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+      annotations:
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/consul-up/birdwatcher-backend:1.0.0
+          env:
+            - name: BIND_ADDR
+              value: "0.0.0.0:7000"
+          ports:
+            - containerPort: 7000

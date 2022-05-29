@@ -1,0 +1,36 @@
+global:
+  name: consul
+  metrics:
+    enabled: true
+  image: hashicorp/consul:1.11.5
+  imageEnvoy: envoyproxy/envoy:v1.20.2
+
+server:
+  replicas: 1
+
+connectInject:
+  enabled: true
+
+controller:
+  enabled: true
+
+prometheus:
+  enabled: true
+
+ui:
+  service:
+    type: LoadBalancer
+    port:
+      http: 8500
+
+ingressGateways:
+  enabled: true
+  defaults:
+    affinity: null
+  gateways:
+    - name: ingress-gateway
+      service:
+        type: LoadBalancer
+        ports:
+          - port: 8080
+      replicas: 1

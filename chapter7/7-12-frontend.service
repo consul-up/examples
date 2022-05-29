@@ -1,0 +1,14 @@
+[Unit]
+Description="Frontend service"
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/frontend
+Restart=on-failure
+Environment=BIND_ADDR=127.0.0.1:6060
+Environment=BACKEND_URL=http://localhost:6001
+Environment=TRACING_URL="http://localhost:9411"
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,191 @@
+[subs="+quotes"]
+----
+$ *mkdir manifests*
+$ *cd manifests*
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f ./*
+
+deployment.apps/backend created
+service/backend created
+deployment.apps/frontend created
+service/frontend created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get deployment,service --selector app=frontend*
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/frontend   1/1     1            1           1s
+
+NAME               TYPE           CLUSTER-IP      EXTERNAL-IP ...
+service/frontend   LoadBalancer   10.98.221.236   127.0.0.1   ...
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get deployment,service --selector app=backend*
+
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/backend   1/1     1            1           1s
+
+NAME              TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/backend   ClusterIP   10.96.38.122   <none>        80/TCP    1s
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f frontend-deployment.yaml*
+
+deployment.apps/frontend configured
+----
+
+[subs="+quotes"]
+----
+$ *kubectl rollout status --watch deploy/frontend*
+
+Waiting for deployment "frontend" rollout to finish...
+deployment "frontend" successfully rolled out
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-deployment.yaml*
+
+deployment.apps/backend configured
+----
+
+[subs="+quotes"]
+----
+$ *kubectl rollout status --watch deploy/backend*
+
+Waiting for deployment "backend" rollout to finish:
+  1 old replicas are pending termination...
+deployment "backend" successfully rolled out
+----
+
+[subs="+quotes"]
+----
+$ *kubectl exec consul-server-0 -n consul -- \*
+    *curl -sS http://frontend.default:6060*
+
+curl: (52) Empty reply from server
+command terminated with exit code 52
+----
+
+[subs="+quotes"]
+----
+$ *kubectl exec deploy/frontend -c frontend -- \
+    curl -si http://backend/bird*
+
+
+HTTP/1.1 200 OK
+...
+----
+
+[subs="+quotes"]
+----
+$ *sudo touch /etc/systemd/system/frontend.service*
+$ *sudo touch /etc/systemd/system/backend.service*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl enable frontend backend*
+
+Created symlink ...
+Created symlink ...
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl start frontend backend*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl status frontend backend*
+
+  frontend.service - "Frontend service"
+     Loaded: loaded...
+     Active: active (running)...
+...
+  backend.service - "Backend service"
+     Loaded: loaded...
+     Active: active (running)...
+----
+
+[subs="+quotes"]
+----
+$ *sudo touch /etc/consul.d/frontend.hcl*
+$ *sudo touch /etc/consul.d/backend.hcl*
+----
+
+[subs="+quotes"]
+----
+$ *consul reload*
+
+Configuration reload triggered
+----
+
+[subs="+quotes"]
+----
+$ *consul catalog services*
+
+backend
+backend-sidecar-proxy
+consul
+frontend
+frontend-sidecar-proxy
+----
+
+[subs="+quotes"]
+----
+*consul connect envoy*
+----
+
+[subs="+quotes"]
+----
+$ *sudo touch /etc/systemd/system/frontend-sidecar-proxy.service*
+$ *sudo touch /etc/systemd/system/backend-sidecar-proxy.service*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl enable frontend-sidecar-proxy*
+$ *sudo systemctl enable backend-sidecar-proxy*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl start frontend-sidecar-proxy*
+$ *sudo systemctl start backend-sidecar-proxy*
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl status frontend-sidecar-proxy*
+
+ frontend-sidecar-proxy.service - "Frontend sidecar proxy service"
+     Loaded: loaded...
+     Active: active (running)...
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl status backend-sidecar-proxy*
+
+ backend-sidecar-proxy.service - "Backend sidecar proxy service"
+     Loaded: loaded...
+     Active: active (running)...
+----
+
+[subs="+quotes"]
+----
+$ *sudo systemctl daemon-reload*
+$ *sudo systemctl restart frontend*
+----
+

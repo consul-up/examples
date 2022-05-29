@@ -1,0 +1,133 @@
+[subs="+quotes"]
+----
+$ *kubectl exec deploy/backend -c backend -- \*
+    *sh -c \'openssl s_client -connect $(hostname -i):20000 | \*
+     *openssl x509 -noout -text'*
+...
+Certificate:
+...
+    X509v3 Subject Alternative Name: critical
+        URI:spiffe://...consul/ns/default/dc/dc1/svc/backend
+...
+----
+
+[subs="+quotes"]
+----
+$ *vagrant ssh*
+----
+
+[subs="+quotes"]
+----
+$ *openssl s_client -connect localhost:22000 | openssl x509 -noout -text*
+...
+    X509v3 Subject Alternative Name:
+        URI:spiffe://....consul/ns/default/dc/dc1/svc/backend
+...
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f deny-all-service-intentions.yaml*
+
+serviceintentions.consul.hashicorp.com/deny-all created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get serviceintentions deny-all -n consul*
+
+NAME       SYNCED   LAST SYNCED   AGE
+deny-all   True     1s            1s
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f frontend-service-intentions.yaml*
+
+serviceintentions.consul.hashicorp.com/frontend created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get serviceintentions frontend*
+
+NAME       SYNCED   LAST SYNCED   AGE
+frontend   True     1s            1s
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f backend-service-intentions.yaml*
+
+serviceintentions.consul.hashicorp.com/backend created
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get serviceintentions backend*
+
+NAME      SYNCED   LAST SYNCED   AGE
+backend   True     1s            1s
+----
+
+[subs="+quotes"]
+----
+$ *vagrant ssh*
+----
+
+[subs="+quotes"]
+----
+$ *cd ~*
+----
+
+[subs="+quotes"]
+----
+$ *consul config write deny-all-service-intentions.hcl*
+
+Config entry written: service-intentions/*
+----
+
+[subs="+quotes"]
+----
+$ *consul intention list*
+
+ID  Source  Action  Destination  Precedence
+    *       deny    *            5
+----
+
+[subs="+quotes"]
+----
+$ *consul config write frontend-service-intentions.hcl*
+
+Config entry written: service-intentions/frontend
+----
+
+[subs="+quotes"]
+----
+$ *consul config write backend-service-intentions.hcl*
+
+Config entry written: service-intentions/backend
+----
+
+[subs="+quotes"]
+----
+$ *kubectl apply -f frontend-service-intentions.yaml*
+
+serviceintentions.consul.hashicorp.com/frontend configured
+----
+
+[subs="+quotes"]
+----
+$ *kubectl get serviceintentions frontend*
+
+NAME      SYNCED   LAST SYNCED   AGE
+frontend  True     1s            10m
+----
+
+[subs="+quotes"]
+----
+$ *consul config write frontend-service-intentions.hcl*
+
+Config entry written: service-intentions/frontend
+----
+
