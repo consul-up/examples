@@ -1,7 +1,7 @@
 [subs="+quotes"]
 ----
 $ *kubectl exec deploy/backend -c backend -- \*
-    *sh -c \'openssl s_client -connect $(hostname -i):20000 | \*
+    *sh -c 'openssl s_client -connect $(hostname -i):20000 | \*
      *openssl x509 -noout -text'*
 ...
 Certificate:
