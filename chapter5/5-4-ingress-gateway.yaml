@@ -1,7 +1,0 @@
-# ingress-gateway.yaml
-apiVersion: consul.hashicorp.com/v1alpha1
-kind: IngressGateway
-metadata:
-  name: my-gateway
-spec:
-  listeners: []
